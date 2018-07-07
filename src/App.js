@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Input,Select,DatePicker,Form,Layout,Col,Row,Button,Upload,List} from 'antd'
+import {Input,Select,DatePicker,Form,Layout,Col,Row,Button,Upload,List,message} from 'antd'
 import {BrowserRouter} from 'react-router'
 import 'antd/dist/antd.min.css'
 import {Map, Marker, MarkerList ,NavigationControl, InfoWindow,Road,Polyline} from 'react-bmap'
@@ -60,6 +60,11 @@ class InputForm extends React.Component
         form.validateFields(null,{},(err,values)=>{
             if(!err)
             {
+                if(values.startTime>=values.startTime)
+                {
+                    message.error('start time must be later than start time.',2);
+                    return ;
+                }
                 this.setState({loading:true})
                 api.post('query',{
                     start:values.startTime,
@@ -69,6 +74,13 @@ class InputForm extends React.Component
                     this.setState({loading:false})
                     this.props.onUpdated(result.data)
                 });
+            }
+            else
+            {
+                if(err.upload)
+                {
+                    message.error(err.upload.errors[0].message)
+                }
             }
         })
     }
@@ -90,10 +102,10 @@ class InputForm extends React.Component
             <Form layout={"horizontal"} onSubmit={this.onSubmit}>
                 <Row>
                     <Col span={8}>
-                <Item label={"起始时间"} {...formItemLayout}>
+                <Item label={"Start Time :"} {...formItemLayout}>
                     {
                         form.getFieldDecorator('startTime',{
-                            rules:[{required:true,message:'必须选择时间'}]})(
+                            rules:[{required:true,message:'you must choose a start time'}]})(
                                 <Select>
                                     {
                                         time.map((value,key)=><Option value={value} key={value}>{value}时</Option>)
@@ -104,10 +116,10 @@ class InputForm extends React.Component
                 </Item>
                     </Col>
                     <Col span={8}>
-                <Item label={"终止时间"} {...formItemLayout}>
+                <Item label={"End Time:"} {...formItemLayout}>
                     {
                         form.getFieldDecorator('endTime',{
-                            rules:[{required:true,message:'必须选择时间'}]})(
+                            rules:[{required:true,message:'you must choose a end time'}]})(
                             <Select>
                                 {
                                     time.map((value,key)=><Option value={value} key={value}>{value}时</Option>)
@@ -121,15 +133,15 @@ class InputForm extends React.Component
                         <Row>
                             <Col span={12}>
                                 {
-                                    form.getFieldDecorator('upload',{rules:[{required:true,message:'必须上传文件'}]})(
+                                    form.getFieldDecorator('upload',{rules:[{required:true,message:'You must upload a file.'}]})(
                                     <Upload accept={".csv"} action={`${baseURL}upload`}>
-                                        <Button>上传文件</Button>
+                                        <Button>Upload Data File</Button>
                                     </Upload>)
                                 }
                             </Col>
                             <Col span={12}>
                         <Button type={"primary"} htmlType={"submit"} loading={this.state.loading}>
-                            确认
+                            Confirm
                         </Button>
                             </Col>
                         </Row>
@@ -149,9 +161,7 @@ class App extends Component {
 
         this.state = {
             marks : [
-                { lng: -73.963241577148438, lat : 40.775009155273438 },
-                { lng: -73.990303039550781, lat : 40.714309692382813},
-                { lng: -73.995513916015625, lat: 40.764793395996094},
+
             ]
         }
     }
