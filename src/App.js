@@ -64,9 +64,9 @@ class InputForm extends React.Component
         form.validateFields(null,{},(err,values)=>{
             if(!err)
             {
-                if(values.startTime>=values.startTime)
+                if(values.startTime>=values.endTime)
                 {
-                    message.error('start time must be later than start time.',2);
+                    message.error('end time must be greater than start time.',2);
                     return ;
                 }
                 this.setState({loading:true})
