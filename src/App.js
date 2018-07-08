@@ -12,7 +12,7 @@ import {Map, Marker, MarkerList ,NavigationControl, InfoWindow,Road,Polyline} fr
 import axios from 'axios'
 const {Option} = Select;
 
-const baseURL = "http://neworld.science:8000/"
+const baseURL = "http://localhost:8000/"
 
 const api = axios.create({
     baseURL
@@ -51,7 +51,8 @@ class InputForm extends React.Component
     }
 
     state ={
-        loading:false
+        loading:false,
+        uploading:false
     }
 
     onUploadChange=()=>{
@@ -140,6 +141,8 @@ class InputForm extends React.Component
                                     form.getFieldDecorator('upload',{rules:[{required:true,message:'You must upload a file.'}]})(
                                     <Upload accept={".csv"} action={`${baseURL}upload`}
                                             beforeUpload={(file)=>{
+                                                this.setState({uploading:true})
+                                                let _this=this
                                                 return new Promise( (resolve,reject) => {
                                                     browserMD5File(file, function (err, md5) {
                                                         api.get(`/check?hash=${md5}`).then(
@@ -147,6 +150,7 @@ class InputForm extends React.Component
                                                                 if (exist) {
                                                                     message.success('We\'ve cached for you.Skipping Uploading data.')
                                                                     form.setFieldsValue({upload:{file:{response:{hash:md5}}}})
+                                                                    _this.setState({uploading:false})
                                                                     reject();
                                                                 }
                                                                 else {
@@ -157,13 +161,21 @@ class InputForm extends React.Component
                                                     })
                                                 })
                                             }}
+                                            onChange={(thins)=>{
+                                                let status=thins.file.status
+                                                console.log(thins,status)
+                                                if(status === 'done' || status === 'error' )
+                                                {
+                                                    this.setState({uploading:false})
+                                                }
+                                            }}
                                     >
-                                        <Button>Upload Data File</Button>
+                                        <Button loading={this.state.loading || this.state.uploading}>Upload Data File</Button>
                                     </Upload>)
                                 }
                             </Col>
                             <Col span={12}>
-                        <Button type={"primary"} htmlType={"submit"} loading={this.state.loading}>
+                        <Button type={"primary"} htmlType={"submit"} loading={this.state.loading || this.state.uploading}>
                             Confirm
                         </Button>
                             </Col>
@@ -230,6 +242,7 @@ class App extends Component {
                   />
                   <MarkerList data={formatedMarks}
                               fillStyle="#ff3333"
+                              animation={true}
                   />
               </Map>
               </Content>
