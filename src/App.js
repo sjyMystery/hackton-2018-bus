@@ -230,11 +230,6 @@ class App extends Component {
                   />
                   <MarkerList data={formatedMarks}
                               fillStyle="#ff3333"
-
-                              animation={true}
-                              isShowShadow={false}
-                              multiple={true}
-                              autoViewport={false}
                   />
               </Map>
               </Content>
