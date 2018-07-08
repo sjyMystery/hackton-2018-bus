@@ -163,7 +163,6 @@ class InputForm extends React.Component
                                             }}
                                             onChange={(thins)=>{
                                                 let status=thins.file.status
-                                                console.log(thins,status)
                                                 if(status === 'done' || status === 'error' )
                                                 {
                                                     this.setState({uploading:false})
@@ -201,7 +200,7 @@ class App extends Component {
         }
     }
 
-    formatedMarks=()=>this.state.marks.map(({lng,lat,title},index)=>({location:`${lng},${lat}`,text:title}))
+    formatedMarks=()=>this.state.marks.map(({lng,lat,title},index)=>({location:`${lng},${lat}`,text:''}))
     center=()=>{
         let pos = this.state.marks.reduce((left,right)=>({lng:left.lng+right.lng,lat:left.lat+right.lat}),{lng:0.0,lat:0.0})
         pos ={
@@ -221,13 +220,14 @@ class App extends Component {
           </Header>
           <Content>
               <Layout style={{marginLeft:'4%',marginRight:'4%',backgroundColor:'white'}}>
-              <Sider style={{backgroundColor:'#efefef',overflowY:'scroll',height:800}} width={500}>
+              <Sider style={{backgroundColor:'#efefef',overflowY:'scroll',height:800}} width={450}>
                   <List
+                      style={{display:'flex',textAlign:'left',marginLeft:'10%'}}
                       dataSource={this.state.marks}
                       renderItem={(item,key) => (
                           <List.Item>
                               <List.Item.Meta
-                                  title={`${key+1}. ${item.title}`}
+                                  title={`${key+1} | ${item.title}`}
                                   description={`Location : ${item.lng} ${item.lat}`}
                               />
                           </List.Item>
@@ -242,7 +242,6 @@ class App extends Component {
                   />
                   <MarkerList data={formatedMarks}
                               fillStyle="#ff3333"
-                              animation={true}
                   />
               </Map>
               </Content>
