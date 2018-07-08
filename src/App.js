@@ -145,7 +145,7 @@ class InputForm extends React.Component
                                                         api.get(`/check?hash=${md5}`).then(
                                                             ({data: {exist}}) => {
                                                                 if (exist) {
-                                                                    message.success('在服务端检测到数据缓存数据！跳过上传。')
+                                                                    message.success('We\'ve cached for you.Skipping Uploading data.')
                                                                     form.setFieldsValue({upload:{file:{response:{hash:md5}}}})
                                                                     reject();
                                                                 }
@@ -215,8 +215,8 @@ class App extends Component {
                       renderItem={(item,key) => (
                           <List.Item>
                               <List.Item.Meta
-                                  title={`Position: ${item.title}`}
-                                  description={`Location1: ${item.lng} ${item.lat}`}
+                                  title={`${key+1}. ${item.title}`}
+                                  description={`Location : ${item.lng} ${item.lat}`}
                               />
                           </List.Item>
                       )}
