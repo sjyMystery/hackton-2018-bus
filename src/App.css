@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  height:100%;
+  width: 100%;
+  overflow: hidden;
 }
 
 .App-logo {
@@ -8,10 +11,6 @@
 }
 
 .App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
 }
 
 .App-title {
@@ -28,7 +27,15 @@
 }
 
 .input-container {
-  margin-top: 1%;
+  padding-top: 1%;
   margin-left: 5%;
   margin-right: 5%;
+}
+
+.form-label {
+  color:white;
+}
+
+.list-span{
+  color:white;
 }

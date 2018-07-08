@@ -10,7 +10,7 @@ import 'antd/dist/antd.min.css'
 import {Map, MarkerList , Polyline} from 'react-bmap'
 import axios from 'axios'
 const {Option} = Select;
-
+const backgroundImage = require('./city-1209105.jpg')
 const baseURL = "http://neworld.science:8000/"
 
 const api = axios.create({
@@ -106,13 +106,13 @@ class InputForm extends React.Component
             <Form layout={"horizontal"} onSubmit={this.onSubmit}>
                 <Row>
                     <Col span={8}>
-                <Item label={"Start Time :"} {...formItemLayout}>
+                        <Item label={<span className={'form-label'}>Start Time </span>} {...formItemLayout} className={'input-item'}>
                     {
                         form.getFieldDecorator('startTime',{
                             rules:[{required:true,message:'you must choose a start time'}]})(
-                                <Select>
+                                <Select style={{backgroundColor:'transparent'}}>
                                     {
-                                        time.map((value,key)=><Option value={value} key={value}>{value}:00</Option>)
+                                        time.map((value,key)=><Option style={{background:'transparent'}} value={value} key={value}>{value}:00</Option>)
                                     }
                                 </Select>
                         )
@@ -120,7 +120,7 @@ class InputForm extends React.Component
                 </Item>
                     </Col>
                     <Col span={8}>
-                <Item label={"End Time:"} {...formItemLayout}>
+                <Item label={<span className={'form-label'}>End Time </span>} {...formItemLayout}>
                     {
                         form.getFieldDecorator('endTime',{
                             rules:[{required:true,message:'you must choose a end time'}]})(
@@ -168,12 +168,12 @@ class InputForm extends React.Component
                                                 }
                                             }}
                                     >
-                                        <Button loading={this.state.loading || this.state.uploading}>Upload Data File</Button>
+                                        <Button type={"danger"} loading={this.state.uploading} disabled={this.state.loading} ghost>Upload Data File</Button>
                                     </Upload>)
                                 }
                             </Col>
                             <Col span={12}>
-                        <Button type={"primary"} htmlType={"submit"} loading={this.state.loading || this.state.uploading}>
+                        <Button ghost type={"dashed"} htmlType={"submit"} loading={this.state.loading} disabled={this.state.uploading}>
                             Confirm
                         </Button>
                             </Col>
@@ -213,28 +213,28 @@ class App extends Component {
       const formatedMarks = this.formatedMarks();
 
     return (
-      <div className="App">
-          <Header style={{backgroundColor:'white',marginTop:'2%'}}>
+      <div className="App" style={{backgroundImage:`url(${backgroundImage})`,backgroundSize:'cover'}}>
+          <Header style={{background:'transparent'}}>
               <WrappedInputForm onUpdated={(data)=>{this.setState({marks:data})}}/>
           </Header>
           <Content>
-              <Layout style={{marginLeft:'4%',marginRight:'4%',backgroundColor:'white'}}>
-              <Sider style={{backgroundColor:'#efefef',overflowY:'scroll',height:800}} width={450}>
+              <Layout style={{marginLeft:'4%',marginRight:'4%',background:'transparent'}}>
+              <Sider style={{background:'transparent',overflowY:'scroll',height:900}} width={450}>
                   <List
                       style={{display:'flex',textAlign:'left',marginLeft:'10%'}}
                       dataSource={this.state.marks}
                       renderItem={(item,key) => (
                           <List.Item>
                               <List.Item.Meta
-                                  title={`${key+1} | ${item.title}`}
-                                  description={`Location : ${item.lng} ${item.lat}`}
+                                  title={<span className={'list-span'}>{key+1} | {item.title} </span>}
+                                  description={<span className={'list-span'}> Location : {item.lng} {item.lat} </span>}
                               />
                           </List.Item>
                       )}
                   />
               </Sider>
               <Content>
-              <Map style={{height:800,marginLeft:'2%',backgroundColor:'white'}} center={this.center()} zoom="13">
+              <Map style={{height:900,marginLeft:'2%',backgroundColor:'white',opacity:this.state.marks.length===0 ? 0 : 1}} center={this.center()} zoom="13">
                   <Polyline
                       strokeColor='green'
                       path={this.state.marks}
@@ -246,7 +246,7 @@ class App extends Component {
               </Content>
               </Layout>
           </Content>
-          <Footer style={{backgroundColor:'white'}}>
+          <Footer style={{background:'transparent'}}>
           </Footer>
       </div>
     );
