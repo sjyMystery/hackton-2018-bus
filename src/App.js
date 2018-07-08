@@ -112,7 +112,7 @@ class InputForm extends React.Component
                             rules:[{required:true,message:'you must choose a start time'}]})(
                                 <Select>
                                     {
-                                        time.map((value,key)=><Option value={value} key={value}>{value}时</Option>)
+                                        time.map((value,key)=><Option value={value} key={value}>{value}:00</Option>)
                                     }
                                 </Select>
                         )
@@ -126,7 +126,7 @@ class InputForm extends React.Component
                             rules:[{required:true,message:'you must choose a end time'}]})(
                             <Select>
                                 {
-                                    time.map((value,key)=><Option value={value} key={value}>{value}时</Option>)
+                                    time.map((value,key)=><Option value={value} key={value}>{value}:00</Option>)
                                 }
                             </Select>
                         )
