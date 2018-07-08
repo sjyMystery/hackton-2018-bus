@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import browserMD5File from 'browser-md5-file';
 
 
 
-import {Input,Select,DatePicker,Form,Layout,Col,Row,Button,Upload,List,message} from 'antd'
+import {Select,Form,Layout,Col,Row,Button,Upload,List,message} from 'antd'
 import {BrowserRouter} from 'react-router'
 import 'antd/dist/antd.min.css'
-import {Map, Marker, MarkerList ,NavigationControl, InfoWindow,Road,Polyline} from 'react-bmap'
+import {Map, MarkerList , Polyline} from 'react-bmap'
 import axios from 'axios'
 const {Option} = Select;
 
-const baseURL = "http://localhost:8000/"
+const baseURL = "http://neworld.science:8000/"
 
 const api = axios.create({
     baseURL
