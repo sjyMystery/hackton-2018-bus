@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import browserMD5File from 'browser-md5-file';
+
+
+
 import {Input,Select,DatePicker,Form,Layout,Col,Row,Button,Upload,List,message} from 'antd'
 import {BrowserRouter} from 'react-router'
 import 'antd/dist/antd.min.css'
@@ -8,7 +12,7 @@ import {Map, Marker, MarkerList ,NavigationControl, InfoWindow,Road,Polyline} fr
 import axios from 'axios'
 const {Option} = Select;
 
-const baseURL = "http://localhost:7001/"
+const baseURL = "http://neworld.science:8000/"
 
 const api = axios.create({
     baseURL
@@ -134,7 +138,26 @@ class InputForm extends React.Component
                             <Col span={12}>
                                 {
                                     form.getFieldDecorator('upload',{rules:[{required:true,message:'You must upload a file.'}]})(
-                                    <Upload accept={".csv"} action={`${baseURL}upload`}>
+                                    <Upload accept={".csv"} action={`${baseURL}upload`}
+                                            beforeUpload={(file)=>{
+                                                return new Promise( (resolve,reject) => {
+                                                    browserMD5File(file, function (err, md5) {
+                                                        api.get(`/check?hash=${md5}`).then(
+                                                            ({data: {exist}}) => {
+                                                                if (exist) {
+                                                                    message.success('在服务端检测到数据缓存数据！跳过上传。')
+                                                                    form.setFieldsValue({upload:{file:{response:{hash:md5}}}})
+                                                                    reject();
+                                                                }
+                                                                else {
+                                                                    resolve();
+                                                                }
+                                                            }
+                                                        )
+                                                    })
+                                                })
+                                            }}
+                                    >
                                         <Button>Upload Data File</Button>
                                     </Upload>)
                                 }
